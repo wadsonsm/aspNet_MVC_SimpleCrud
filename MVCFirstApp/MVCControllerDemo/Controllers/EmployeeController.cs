@@ -17,7 +17,7 @@ namespace MVCControllerDemo.Controllers
         public ActionResult Search(string name)
         {
             var input = Server.HtmlEncode(name);
-            return Content(input);
+            return Content(name);
         }
 
     }

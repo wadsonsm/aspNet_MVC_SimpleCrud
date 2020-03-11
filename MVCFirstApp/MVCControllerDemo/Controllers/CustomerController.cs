@@ -14,7 +14,7 @@ namespace MVCControllerDemo.Controllers
         //    return View();
         //}
 
-       public string Index()
+       public string GetAllCustomers()
        {
             return @"<ul>
                         <li> Ali Raza</li>
