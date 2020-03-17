@@ -12,7 +12,7 @@ namespace MVCSimpleApp.Controllers
         // GET: Employee
         public ActionResult Index()
         {
-            var employees = from e in GetEmployeeList()
+            var employees = from e in empList
                             orderby e.Id
                             select e;
             return View(employees);
@@ -36,7 +36,18 @@ namespace MVCSimpleApp.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                Employee emp = new Employee();
+                emp.Name = collection["Name"];
+
+                DateTime jDate;
+                DateTime.TryParse(collection["DOB"], out jDate);
+
+                emp.JoiningDate = jDate;
+
+                string age = collection["Age"];
+                emp.Age = Int32.Parse(age);
+
+                empList.Add(emp);
 
                 return RedirectToAction("Index");
             }
@@ -60,19 +71,18 @@ namespace MVCSimpleApp.Controllers
         {
             try
             {
-                List<Employee> empList = GetEmployeeList();
                 var employee = empList.Single(m => m.Id == id);
-                if(TryUpdateModel(employee))
+                if (TryUpdateModel(employee))
                 {
                     return RedirectToAction("Index");
                 }
-
                 return View(employee);
             }
-            catch
+            catch (Exception)
             {
                 return View();
             }
+            
         }
 
         // GET: Employee/Delete/5
@@ -133,5 +143,36 @@ namespace MVCSimpleApp.Controllers
                     }
             };
         }
+
+        public static List<Employee> empList = new List<Employee>
+        {
+            new Employee
+            {
+                Id = 1,
+                Name = "Allan",
+                JoiningDate = DateTime.Parse(DateTime.Today.ToString()),
+                Age = 23
+            },
+            new Employee{
+                Id = 2,
+                Name = "Carson",
+                JoiningDate = DateTime.Parse(DateTime.Today.ToString()),
+                Age = 45
+            },
+
+            new Employee{
+                Id = 3,
+                Name = "Carson",
+                JoiningDate = DateTime.Parse(DateTime.Today.ToString()),
+                Age = 37
+            },
+
+            new Employee{
+                Id = 4,
+                Name = "Laura",
+                JoiningDate = DateTime.Parse(DateTime.Today.ToString()),
+                Age = 26
+            },
+        };
     }
 }
