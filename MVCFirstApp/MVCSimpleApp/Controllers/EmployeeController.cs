@@ -9,19 +9,20 @@ namespace MVCSimpleApp.Controllers
 {
     public class EmployeeController : Controller
     {
+        private EmpDBContext db = new EmpDBContext();
         // GET: Employee
         public ActionResult Index()
         {
-            var employees = from e in empList
+            //Without Data Base
+            //var employees = from e in empList
+            //                orderby e.Id
+            //                select e;
+            //return View(employees);
+
+            var employees = from e in db.Employees
                             orderby e.Id
                             select e;
             return View(employees);
-        }
-
-        // GET: Employee/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: Employee/Create
@@ -30,7 +31,8 @@ namespace MVCSimpleApp.Controllers
             return View();
         }
 
-        // POST: Employee/Create
+        /*
+        // POST: Employee/Create WITHOUT ENTITY
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -42,7 +44,7 @@ namespace MVCSimpleApp.Controllers
                 DateTime jDate;
                 //DateTime.TryParse(collection["DOB"], out jDate);
                 //emp.JoiningDate = jDate;
-                jDate =  Convert.ToDateTime(collection["JoiningDate"]);
+                jDate = Convert.ToDateTime(collection["JoiningDate"]);
                 emp.JoiningDate = jDate;
 
                 string age = collection["Age"];
@@ -57,16 +59,39 @@ namespace MVCSimpleApp.Controllers
                 return View();
             }
         }
+        */
+
+        [HttpPost]
+        public ActionResult Create(Employee emp)
+        {
+            try
+            {
+                db.Employees.Add(emp);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         // GET: Employee/Edit/5
         public ActionResult Edit(int id)
         {
+            /*
             List<Employee> empList = GetEmployeeList();
             var employee = empList.Single(m => m.Id == id);
+            return View(employee);
+            */
+
+            var employee = db.Employees.Single(m => m.Id == id);
             return View(employee);
         }
 
         // POST: Employee/Edit/5
+        /*
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -83,8 +108,39 @@ namespace MVCSimpleApp.Controllers
             {
                 return View();
             }
-            
         }
+        */
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                var employee = db.Employees.Single(m => m.Id == id);
+                if (TryUpdateModel(employee))
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(employee);
+            }
+            catch (Exception)
+            {
+
+                return View();
+            }
+        }
+
+
+
+        // GET: Employee/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        
+
+      
 
         // GET: Employee/Delete/5
         public ActionResult Delete(int id)
@@ -108,6 +164,7 @@ namespace MVCSimpleApp.Controllers
             }
         }
 
+        /*
         [NonAction]
         public List<Employee> GetEmployeeList()
         {
@@ -145,6 +202,7 @@ namespace MVCSimpleApp.Controllers
             };
         }
 
+
         public static List<Employee> empList = new List<Employee>
         {
             new Employee
@@ -175,5 +233,7 @@ namespace MVCSimpleApp.Controllers
                 Age = 26
             },
         };
+        */
     }
+
 }

@@ -28,23 +28,13 @@ namespace MVCSimpleApp.Controllers
         }
 
         //POST: Users/Create
-        [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            try
-            {
-                User newUser = new User();
-                newUser.Name = collection["Name"];
-                newUser.Email = collection["Email"];
-                listaUsuarios.Add(newUser);
-                return RedirectToAction("Index");
-            }
-            catch (Exception e)
-            {
-
-                return RedirectToAction("Index");
-            }
-            
+            User newUser = new User();
+            newUser.Name = collection["Name"];
+            newUser.Email = collection["Email"];            
+            listaUsuarios.Add(newUser);
+            return View();
         }
 
         //GET: Test/Edit
