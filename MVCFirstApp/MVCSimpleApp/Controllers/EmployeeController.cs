@@ -40,8 +40,9 @@ namespace MVCSimpleApp.Controllers
                 emp.Name = collection["Name"];
 
                 DateTime jDate;
-                DateTime.TryParse(collection["DOB"], out jDate);
-
+                //DateTime.TryParse(collection["DOB"], out jDate);
+                //emp.JoiningDate = jDate;
+                jDate =  Convert.ToDateTime(collection["JoiningDate"]);
                 emp.JoiningDate = jDate;
 
                 string age = collection["Age"];
